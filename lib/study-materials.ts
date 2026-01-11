@@ -1,9 +1,12 @@
+import { supabase } from './supabase';
+
 export interface Material {
     id: number;
     title: string;
     author: string;
     type: string;
-    link: string; // URL to the PDF or external link
+    link: string;
+    created_at?: string;
 }
 
 export interface SubjectSection {
@@ -11,35 +14,50 @@ export interface SubjectSection {
     materials: Material[];
 }
 
-export const studyMaterials: Record<string, SubjectSection[]> = {
-    "std-10": [
-        {
-            subject: "Tamil",
-            materials: [
-                { id: 1, title: "10th Tamil - Public Exam Model Question Paper 2026", author: "TNDGE", type: "Question Paper", link: "/uploads/10th_tamil_model_2026.pdf" },
-                { id: 2, title: "10th Tamil - Unit 1 Guide", author: "Surya Guides", type: "Study Material", link: "https://drive.google.com/file/d/example" },
-            ]
-        },
-        {
-            subject: "English",
-            materials: [
-                { id: 3, title: "10th English - Grammar Notes", author: "Way to Success", type: "Notes", link: "#" },
-            ]
-        },
-        {
-            subject: "Maths",
-            materials: []
-        }
-    ],
-    "std-11": [
-        // Add 11th standard materials here
-    ],
-    "std-12": [
-        // Add 12th standard materials here
-    ]
-};
+export const getMaterialsForStandard = async (std: string): Promise<SubjectSection[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('study_materials')
+            .select('*')
+            .eq('standard', std)
+            .order('created_at', { ascending: false });
 
-// Helper function to get data safely
-export const getMaterialsForStandard = (std: string) => {
-    return studyMaterials[std] || [];
+        if (error) {
+            console.error('Error fetching materials:', error);
+            return [];
+        }
+
+        if (!data || data.length === 0) {
+            return [];
+        }
+
+        // Group by subject
+        const groupedMap = new Map<string, Material[]>();
+
+        data.forEach((item: any) => {
+            if (!groupedMap.has(item.subject)) {
+                groupedMap.set(item.subject, []);
+            }
+            groupedMap.get(item.subject)!.push({
+                id: item.id,
+                title: item.title,
+                author: item.author,
+                type: item.type,
+                link: item.link,
+                created_at: item.created_at
+            });
+        });
+
+        // Convert map to array
+        const results: SubjectSection[] = [];
+        groupedMap.forEach((materials, subject) => {
+            results.push({ subject, materials });
+        });
+
+        return results;
+
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        return [];
+    }
 };

@@ -8,7 +8,7 @@ export default async function StandardPage(props: { params: Params }) {
     const standard = params.standard.replace('std-', '') + 'th Standard';
 
     // Get real data from our data file
-    const subjectsData = getMaterialsForStandard(params.standard);
+    const subjectsData = await getMaterialsForStandard(params.standard);
 
     return (
         <div style={{ minHeight: '80vh' }}>
