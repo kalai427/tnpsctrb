@@ -1,0 +1,104 @@
+.adminContainer {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 2rem;
+    min-height: 80vh;
+}
+
+.loginCard,
+.uploadCard {
+    background: white;
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.loginCard h1,
+.uploadCard h1 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--text-main);
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.input:focus,
+.select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.fileInputWrapper {
+    border: 2px dashed #cbd5e1;
+    padding: 2rem;
+    text-align: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fileInputWrapper:hover {
+    border-color: var(--primary);
+    background: #f0f9ff;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submitBtn:hover {
+    background: var(--primary-dark);
+}
+
+.submitBtn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.statusMessage {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-weight: 500;
+}
+
+.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
