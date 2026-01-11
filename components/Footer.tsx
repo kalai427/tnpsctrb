@@ -40,7 +40,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className={styles.copyright}>
-                © {new Date().getFullYear()} TNPSCTRB. All rights reserved.
+                © {new Date().getFullYear()} TNPSCTRB. All rights reserved. | <Link href="/admin" style={{ opacity: 0.5 }}>Admin Login</Link>
             </div>
         </footer>
     );
