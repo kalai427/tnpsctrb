@@ -20,20 +20,38 @@ const newsUpdates = [
 ];
 
 export default async function Home() {
-  const { data: recentPostsData } = await supabase
-    .from('study_materials')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(5);
+  const isSupabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
 
-  const posts = recentPostsData || [];
+  let posts: any[] = [];
+  let links: any[] = [];
 
-  const { data: quickLinks } = await supabase
-    .from('quick_links')
-    .select('*')
-    .order('position', { ascending: true });
+  if (isSupabaseConfigured) {
+    try {
+      const { data: recentPostsData } = await supabase
+        .from('study_materials')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-  const links = quickLinks || [];
+      posts = recentPostsData || [];
+
+      const { data: quickLinks } = await supabase
+        .from('quick_links')
+        .select('*')
+        .order('position', { ascending: true });
+
+      links = quickLinks || [];
+    } catch (err) {
+      console.error('Supabase fetch error:', err);
+    }
+  } else {
+    // Fallback posts for demonstration when Supabase is not connected
+    posts = [
+      { id: 1, title: '12th Maths Volume 1 Full Guide', subject: 'Maths', standard: 'std-12', created_at: new Date().toISOString() },
+      { id: 2, title: '10th Tamil Quarterly Question Paper', subject: 'Tamil', standard: 'std-10', created_at: new Date().toISOString() },
+    ];
+  }
 
   return (
     <>
@@ -88,9 +106,30 @@ export default async function Home() {
           <aside className={styles.sidebar}>
             <div className={styles.sidebarWidget}>
               <div className={styles.widgetTitle}>
-                Quick Links <span className={styles.badge}>Hot</span>
+                10th Standard <span className={styles.badge}>Hot</span>
               </div>
-              <QuickLinksClient links={links} />
+              <QuickLinksClient links={links} category="std-10" />
+            </div>
+
+            <div className={styles.sidebarWidget}>
+              <div className={styles.widgetTitle}>
+                11th Standard <span className={styles.badge}>New</span>
+              </div>
+              <QuickLinksClient links={links} category="std-11" />
+            </div>
+
+            <div className={styles.sidebarWidget}>
+              <div className={styles.widgetTitle}>
+                12th Standard <span className={styles.badge}>Live</span>
+              </div>
+              <QuickLinksClient links={links} category="std-12" />
+            </div>
+
+            <div className={styles.sidebarWidget}>
+              <div className={styles.widgetTitle}>
+                Important Links
+              </div>
+              <QuickLinksClient links={links} category="other" />
             </div>
 
             <div className={styles.sidebarWidget}>
