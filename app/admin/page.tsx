@@ -21,6 +21,7 @@ export default function AdminPage() {
     const [linkTitle, setLinkTitle] = useState('');
     const [linkUrl, setLinkUrl] = useState('');
     const [linkPosition, setLinkPosition] = useState('');
+    const [parentLink, setParentLink] = useState<string>('null');
     const [quickLinks, setQuickLinks] = useState<any[]>([]);
     const [linkLoading, setLinkLoading] = useState(false);
 
@@ -104,13 +105,15 @@ export default function AdminPage() {
             .insert([{
                 title: linkTitle,
                 url: linkUrl,
-                position: parseInt(linkPosition) || 0
+                position: parseInt(linkPosition) || 0,
+                parent_id: parentLink === 'null' ? null : parseInt(parentLink)
             }]);
 
         if (!error) {
             setLinkTitle('');
             setLinkUrl('');
             setLinkPosition('');
+            setParentLink('null');
             fetchQuickLinks();
         } else {
             alert(error.message);
@@ -258,6 +261,19 @@ export default function AdminPage() {
                             onChange={(e) => setLinkPosition(e.target.value)}
                             placeholder="1"
                         />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Parent Link (Optional)</label>
+                        <select
+                            className={styles.select}
+                            value={parentLink}
+                            onChange={(e) => setParentLink(e.target.value)}
+                        >
+                            <option value="null">None (Top Level)</option>
+                            {quickLinks.filter(l => !l.parent_id).map(link => (
+                                <option key={link.id} value={link.id}>{link.title}</option>
+                            ))}
+                        </select>
                     </div>
                     <button disabled={linkLoading} type="submit" className={styles.submitBtn}>
                         {linkLoading ? 'Adding...' : 'Add Link'}

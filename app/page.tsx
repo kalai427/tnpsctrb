@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from './page.module.css';
 import { supabase } from '@/lib/supabase';
+import QuickLinksClient from '@/components/QuickLinksClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,27 +90,7 @@ export default async function Home() {
               <div className={styles.widgetTitle}>
                 Quick Links <span className={styles.badge}>Hot</span>
               </div>
-              <ul className={styles.linkList}>
-                {links.map((link) => (
-                  <li key={link.id}>
-                    <a
-                      href={link.url || '#'}
-                      target={link.url?.startsWith('http') ? '_blank' : '_self'}
-                      rel="noopener noreferrer"
-                    >
-                      {link.title}
-                    </a>
-                  </li>
-                ))}
-                {links.length === 0 && (
-                  <>
-                    <li><a href="/textbooks">10th/11th/12th Text Books</a></li>
-                    <li><a href="/timetable">Public Exam Time Table</a></li>
-                    <li><a href="/lesson-plan">Lesson Plan 2026</a></li>
-                    <li><a href="/model-papers">PTA Model Question Papers</a></li>
-                  </>
-                )}
-              </ul>
+              <QuickLinksClient links={links} />
             </div>
 
             <div className={styles.sidebarWidget}>

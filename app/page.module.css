@@ -251,6 +251,63 @@
   background: rgba(37, 99, 235, 0.05);
 }
 
+.parentItem {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.parentItem:last-child {
+  border-bottom: none;
+}
+
+.parentToggle {
+  width: 100%;
+  padding: 0.8rem 0;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-main);
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.parentToggle:hover {
+  color: var(--primary);
+}
+
+.parentToggle span {
+  font-family: monospace;
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.parentToggle.active {
+  color: var(--primary);
+}
+
+.subList {
+  padding-left: 1.2rem;
+  padding-bottom: 0.5rem;
+  list-style: none;
+}
+
+.subList li {
+  border-bottom: none !important;
+}
+
+.subList a {
+  padding: 0.4rem 0 !important;
+  font-size: 0.85rem !important;
+  opacity: 0.8;
+}
+
+.standaloneParent {
+  display: block;
+  padding: 0.8rem 0;
+}
+
 .badge {
   background: var(--accent);
   color: white;
