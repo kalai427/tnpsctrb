@@ -39,6 +39,8 @@
   --spacing-md: 1.5rem;
   --spacing-lg: 3rem;
   --spacing-xl: 5rem;
+  --spacing-2xl: 8rem;
+  /* Added for more whitespace */
 
   --container-width: 1200px;
 }
@@ -57,7 +59,8 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-page);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.7;
+  /* Increased for better readability */
   -webkit-font-smoothing: antialiased;
 }
 
@@ -71,7 +74,8 @@ h4 {
 }
 
 section {
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-2xl) 0;
+  /* Base padding increased for whitespace */
 }
 
 .container {
