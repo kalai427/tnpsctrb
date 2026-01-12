@@ -1,11 +1,15 @@
 .hero {
   background: var(--grad-primary);
   color: white;
-  padding: 5rem 1rem;
+  padding: 4rem 1rem;
   text-align: center;
-  position: relative;
+  position: sticky;
+  top: 4.5rem;
+  /* Matches navbar height */
+  z-index: 1000;
   overflow: hidden;
   margin-bottom: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .heroContainer {
