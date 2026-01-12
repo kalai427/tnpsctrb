@@ -1,19 +1,14 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import { supabase } from '@/lib/supabase';
+
+export const dynamic = 'force-dynamic';
 
 const categories = [
   { title: "10th Standard", icon: "📚", link: "/std-10" },
   { title: "11th Standard", icon: "🧬", link: "/std-11" },
   { title: "12th Standard", icon: "🎓", link: "/std-12" },
   { title: "TNPSC / TET", icon: "🏛️", link: "/exams" },
-];
-
-const recentPosts = [
-  { id: 1, title: "10th Public Exam Time Table 2026 Released", date: "10", month: "Jan", desc: "The official time table for the 10th standard public examination has been released by the Directorate of Government Examinations." },
-  { id: 2, title: "12th Physics - Important Questions & One Words", date: "09", month: "Jan", desc: "Download the most important 5 mark and 3 mark questions for the upcoming 12th revision exam." },
-  { id: 3, title: "TNPSC Group 4 Notification Expected Soon", date: "08", month: "Jan", desc: "Reports suggest that the TNPSC Group 4 notification will be released by the end of this month." },
-  { id: 4, title: "11th Chemistry - Unit 4 Study Material", date: "08", month: "Jan", desc: "Complete study material for Unit 4 provided by expert teachers. Includes key answers." },
-  { id: 5, title: "Half Yearly Exam Results Published", date: "05", month: "Jan", desc: "Check your school portal for the half yearly examination results declared today." },
 ];
 
 const newsUpdates = [
@@ -23,7 +18,22 @@ const newsUpdates = [
   "⚡ NEET 2026 Registration starts on Feb 1st."
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { data: recentPostsData } = await supabase
+    .from('study_materials')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(5);
+
+  const posts = recentPostsData || [];
+
+  const { data: quickLinks } = await supabase
+    .from('quick_links')
+    .select('*')
+    .order('position', { ascending: true });
+
+  const links = quickLinks || [];
+
   return (
     <>
       <section className={styles.hero}>
@@ -58,18 +68,19 @@ export default function Home() {
           <div className="main-content">
             <h2 className="section-title">Latest Updates</h2>
             <div className={styles.postList}>
-              {recentPosts.map((post) => (
+              {posts.map((post) => (
                 <div key={post.id} className={styles.postCard}>
                   <div className={styles.dateBox}>
-                    <span className={styles.dateDay}>{post.date}</span>
-                    <span className={styles.dateMonth}>{post.month}</span>
+                    <span className={styles.dateDay}>{new Date(post.created_at).getDate()}</span>
+                    <span className={styles.dateMonth}>{new Date(post.created_at).toLocaleString('default', { month: 'short' })}</span>
                   </div>
                   <div className={styles.postContent}>
-                    <h3><Link href={`/post/${post.id}`}>{post.title}</Link></h3>
-                    <p>{post.desc}</p>
+                    <h3><Link href={post.link || '#'}>{post.title}</Link></h3>
+                    <p>{post.subject} material for {post.standard.replace('std-', '')}th Standard.</p>
                   </div>
                 </div>
               ))}
+              {posts.length === 0 && <p>No updates available yet.</p>}
             </div>
           </div>
 
@@ -79,10 +90,19 @@ export default function Home() {
                 Quick Links <span className={styles.badge}>Hot</span>
               </div>
               <ul className={styles.linkList}>
-                <li><Link href="#">10th/11th/12th Text Books</Link></li>
-                <li><Link href="#">Public Exam Time Table</Link></li>
-                <li><Link href="#">Lesson Plan 2026</Link></li>
-                <li><Link href="#">PTA Model Question Papers</Link></li>
+                {links.map((link) => (
+                  <li key={link.id}>
+                    <a href={link.url}>{link.title}</a>
+                  </li>
+                ))}
+                {links.length === 0 && (
+                  <>
+                    <li><Link href="#">10th/11th/12th Text Books</Link></li>
+                    <li><Link href="#">Public Exam Time Table</Link></li>
+                    <li><Link href="#">Lesson Plan 2026</Link></li>
+                    <li><Link href="#">PTA Model Question Papers</Link></li>
+                  </>
+                )}
               </ul>
             </div>
 

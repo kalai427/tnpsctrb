@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './admin.module.css';
@@ -16,6 +16,13 @@ export default function AdminPage() {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    // Quick Links State
+    const [linkTitle, setLinkTitle] = useState('');
+    const [linkUrl, setLinkUrl] = useState('');
+    const [linkPosition, setLinkPosition] = useState('');
+    const [quickLinks, setQuickLinks] = useState<any[]>([]);
+    const [linkLoading, setLinkLoading] = useState(false);
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,6 +87,51 @@ export default function AdminPage() {
             setLoading(false);
         }
     };
+
+    const fetchQuickLinks = async () => {
+        const { data, error } = await supabase
+            .from('quick_links')
+            .select('*')
+            .order('position', { ascending: true });
+        if (!error && data) setQuickLinks(data);
+    };
+
+    const handleAddLink = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLinkLoading(true);
+        const { error } = await supabase
+            .from('quick_links')
+            .insert([{
+                title: linkTitle,
+                url: linkUrl,
+                position: parseInt(linkPosition) || 0
+            }]);
+
+        if (!error) {
+            setLinkTitle('');
+            setLinkUrl('');
+            setLinkPosition('');
+            fetchQuickLinks();
+        } else {
+            alert(error.message);
+        }
+        setLinkLoading(false);
+    };
+
+    const handleDeleteLink = async (id: number) => {
+        if (!confirm('Are you sure?')) return;
+        const { error } = await supabase
+            .from('quick_links')
+            .delete()
+            .eq('id', id);
+        if (!error) fetchQuickLinks();
+        else alert(error.message);
+    };
+
+    // Load links when logged in
+    useEffect(() => {
+        if (isAuthenticated) fetchQuickLinks();
+    }, [isAuthenticated]);
 
     if (!isAuthenticated) {
         return (
@@ -169,6 +221,65 @@ export default function AdminPage() {
                         </div>
                     )}
                 </form>
+            </div>
+
+            <div className={styles.uploadCard} style={{ marginTop: '2rem' }}>
+                <h1>Quick Links Manager</h1>
+                <form onSubmit={handleAddLink}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Link Title</label>
+                        <input
+                            required
+                            type="text"
+                            className={styles.input}
+                            value={linkTitle}
+                            onChange={(e) => setLinkTitle(e.target.value)}
+                            placeholder="e.g. 10th Books"
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>URL</label>
+                        <input
+                            required
+                            type="text"
+                            className={styles.input}
+                            value={linkUrl}
+                            onChange={(e) => setLinkUrl(e.target.value)}
+                            placeholder="https://..."
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Position (Lower comes first)</label>
+                        <input
+                            required
+                            type="number"
+                            className={styles.input}
+                            value={linkPosition}
+                            onChange={(e) => setLinkPosition(e.target.value)}
+                            placeholder="1"
+                        />
+                    </div>
+                    <button disabled={linkLoading} type="submit" className={styles.submitBtn}>
+                        {linkLoading ? 'Adding...' : 'Add Link'}
+                    </button>
+                </form>
+
+                <div style={{ marginTop: '2rem' }}>
+                    <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Existing Links</h2>
+                    <ul className={styles.adminLinkList}>
+                        {quickLinks.map((link) => (
+                            <li key={link.id} className={styles.adminLinkItem}>
+                                <span>{link.position}. {link.title}</span>
+                                <button
+                                    onClick={() => handleDeleteLink(link.id)}
+                                    className={styles.deleteBtn}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );
