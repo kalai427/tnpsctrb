@@ -3,9 +3,11 @@
     top: 0;
     z-index: 100;
     background: var(--bg-header);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    padding: 1rem 0;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.85rem 0;
+    transition: all 0.3s ease;
 }
 
 .navContainer {
@@ -18,56 +20,66 @@
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    color: var(--primary);
+    font-family: var(--font-heading);
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.05em;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.logo span {
-    color: var(--secondary);
-}
-
 .navLinks {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 .navLink {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-main);
-    position: relative;
-    font-size: 0.95rem;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s ease, color 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .navLink:hover {
     color: var(--primary);
-}
-
-.navLink::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: var(--primary);
-    transition: width 0.3s ease;
-}
-
-.navLink:hover::after {
-    width: 100%;
+    background: rgba(79, 70, 229, 0.05);
 }
 
 .mobileMenuBtn {
     display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+    background: var(--bg-page);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    font-size: 1.25rem;
     cursor: pointer;
     color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.mobileMenuBtn:hover {
+    background: var(--border-color);
+}
+
+@media (max-width: 1024px) {
+    .navLinks {
+        gap: 0.8rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -76,6 +88,6 @@
     }
 
     .mobileMenuBtn {
-        display: block;
+        display: flex;
     }
 }

@@ -1,72 +1,106 @@
 .hero {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: var(--grad-primary);
   color: white;
-  padding: 4rem 1rem;
+  padding: 8rem 1rem 6rem;
   text-align: center;
-  border-radius: 0 0 50% 50% / 20px;
-  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .heroTitle {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 800;
-  margin-bottom: 1rem;
-  letter-spacing: -0.05em;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+  font-family: var(--font-heading);
 }
 
 .heroSubtitle {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto 2rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 .searchBar {
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   position: relative;
+  z-index: 2;
 }
 
 .searchInput {
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 2rem;
   border-radius: var(--radius-full);
-  border: none;
-  font-size: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  font-size: 1.1rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   outline: none;
+  transition: all 0.3s ease;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.searchInput:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .tickerContainer {
   background: var(--bg-card);
-  border-bottom: 3px solid var(--secondary);
+  border-bottom: 1px solid var(--border-color);
   overflow: hidden;
   white-space: nowrap;
-  padding: 0.8rem 0;
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-sm);
+  padding: 1rem 0;
+  margin-bottom: 4rem;
   display: flex;
   align-items: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .tickerLabel {
-  background: var(--danger);
+  background: var(--accent);
   color: white;
-  padding: 0.3rem 0.8rem;
-  font-weight: 700;
-  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  font-weight: 800;
+  font-size: 0.75rem;
   border-radius: var(--radius-sm);
   margin-left: max(1rem, calc((100vw - var(--container-width)) / 2));
   z-index: 10;
   position: relative;
+  letter-spacing: 0.1em;
 }
 
 .tickerText {
   display: inline-block;
-  animation: ticker 20s linear infinite;
+  animation: ticker 30s linear infinite;
   padding-left: 2rem;
   color: var(--text-main);
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 @keyframes ticker {
@@ -81,82 +115,92 @@
 
 .categories {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
 }
 
 .categoryCard {
   background: var(--bg-card);
-  padding: 2rem;
-  border-radius: var(--radius-lg);
+  padding: 3rem 2rem;
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  cursor: pointer;
+  gap: 1.5rem;
 }
 
 .categoryCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-12px) scale(1.02);
   box-shadow: var(--shadow-hover);
   border-color: var(--primary-light);
 }
 
 .catIcon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  background: rgba(37, 99, 235, 0.1);
-  width: 80px;
-  height: 80px;
+  font-size: 3rem;
+  background: rgba(79, 70, 229, 0.08);
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   color: var(--primary);
+  transition: all 0.5s ease;
+}
+
+.categoryCard:hover .catIcon {
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  transform: rotate(10deg);
 }
 
 .catTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--text-main);
+  font-family: var(--font-heading);
 }
 
 .mainGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 3rem;
-  margin-bottom: 4rem;
+  grid-template-columns: 1fr 340px;
+  gap: 4rem;
+  margin-bottom: 6rem;
 }
 
-@media(max-width: 900px) {
+@media(max-width: 1100px) {
   .mainGrid {
     grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
 
 .postList {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .postCard {
   background: var(--bg-card);
   padding: 1.5rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   display: flex;
-  gap: 1.5rem;
-  transition: box-shadow 0.2s;
+  gap: 2rem;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
 }
 
 .postCard:hover {
   box-shadow: var(--shadow-md);
+  transform: translateX(10px);
 }
 
 .dateBox {
@@ -165,61 +209,67 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-page);
-  padding: 0.5rem 1rem;
+  padding: 0.75rem;
   border-radius: var(--radius-md);
-  min-width: 70px;
-  height: 70px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-width: 80px;
+  height: 80px;
+  border: 1px solid var(--border-color);
 }
 
 .dateDay {
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.75rem;
+  font-weight: 900;
   color: var(--primary);
   line-height: 1;
+  font-family: var(--font-heading);
 }
 
 .dateMonth {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.1em;
 }
 
 .postContent h3 {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin-bottom: 0.5rem;
   color: var(--text-main);
+  font-family: var(--font-heading);
 }
 
 .postContent p {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .sidebarWidget {
   background: var(--bg-card);
-  padding: 1.5rem;
+  padding: 2rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .widgetTitle {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--bg-page);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--font-heading);
+  color: var(--text-main);
 }
 
 .linkList {
@@ -227,91 +277,83 @@
   margin: 0;
 }
 
-.linkList li {
-  padding: 0;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
-}
-
-.linkList li:last-child {
-  border-bottom: none;
-}
-
-.linkList a {
-  display: block;
-  width: 100%;
-  padding: 0.6rem 0;
-  font-size: 0.95rem;
-  color: var(--text-main);
-  transition: all 0.2s ease;
-}
-
-.linkList a:hover {
-  color: var(--primary);
-  padding-left: 8px;
-  background: rgba(37, 99, 235, 0.05);
-}
-
 .parentItem {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
 }
 
-.parentItem:last-child {
-  border-bottom: none;
-}
-
-.parentToggle {
+.parentToggle,
+.standaloneParent {
   width: 100%;
-  padding: 0.8rem 0;
-  background: none;
-  border: none;
+  padding: 0.8rem 1rem;
+  background: var(--bg-page);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   color: var(--text-main);
   text-align: left;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
 }
 
-.parentToggle:hover {
+.parentToggle:hover,
+.standaloneParent:hover {
+  background: white;
+  border-color: var(--primary-light);
   color: var(--primary);
+  transform: translateX(4px);
 }
 
 .parentToggle span {
-  font-family: monospace;
   font-size: 1.2rem;
-  opacity: 0.6;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
 }
 
 .parentToggle.active {
-  color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.parentToggle.active span {
+  color: white;
+  transform: rotate(180deg);
 }
 
 .subList {
-  padding-left: 1.2rem;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem 0 0.5rem 1rem;
   list-style: none;
+  border-left: 2px solid var(--primary-light);
+  margin-left: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .subList li {
-  border-bottom: none !important;
+  margin-bottom: 0.25rem;
 }
 
 .subList a {
-  padding: 0.4rem 0 !important;
-  font-size: 0.85rem !important;
-  opacity: 0.8;
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
 }
 
-.standaloneParent {
-  display: block;
-  padding: 0.8rem 0;
+.subList a:hover {
+  background: rgba(79, 70, 229, 0.05);
+  color: var(--primary);
+  padding-left: 1.25rem;
 }
 
 .badge {
   background: var(--accent);
   color: white;
-  font-size: 0.7rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
 }
