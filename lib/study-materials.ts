@@ -3,9 +3,12 @@ import { supabase } from './supabase';
 export interface Material {
     id: number;
     title: string;
-    author: string;
-    type: string;
+    subject: string;
+    standard: string;
+    type: 'PDF' | 'MCQ' | 'Exam' | 'Notes';
     link: string;
+    category?: string;
+    sub_category?: string;
     created_at?: string;
 }
 
@@ -14,16 +17,71 @@ export interface SubjectSection {
     materials: Material[];
 }
 
-export const getMaterialsForStandard = async (std: string): Promise<SubjectSection[]> => {
-    // Check if Supabase is properly configured
-    const isSupabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL &&
-        !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+export interface UpdateItem {
+    title: string;
+    type: string;
+    date: string;
+    tag: string;
+    badgeColor: string;
+    textColor: string;
+}
 
-    if (!isSupabaseConfigured) {
-        // Return dummy data if not configured to avoid console errors
-        return getFallbackData(std);
+export interface ExamStat {
+    name: string;
+    mcqs: string;
+    notes: string;
+    icon: string;
+}
+
+// 1. Fetch Latest Updates across all categories
+export const getLatestUpdates = async (): Promise<UpdateItem[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('study_materials')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+        if (error || !data || data.length === 0) return getFallbackUpdates();
+
+        return data.map(item => ({
+            title: item.title,
+            type: item.type,
+            date: new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+            tag: 'New',
+            badgeColor: getBadgeColors(item.type).bg,
+            textColor: getBadgeColors(item.type).text
+        }));
+    } catch {
+        return getFallbackUpdates();
     }
+};
 
+// 2. Fetch Stats for Competitive Exams
+export const getExamStats = async (category: string): Promise<ExamStat[]> => {
+    // In a real app, you might have an 'exam_stats' table or aggregate 'study_materials'
+    // For this step, we'll simulate the aggregation or return structured mock data from Supabase if available
+    try {
+        const { data, error } = await supabase
+            .from('exam_stats')
+            .select('*')
+            .eq('category', category);
+
+        if (error || !data || data.length === 0) return getFallbackExamStats(category);
+
+        return data.map(item => ({
+            name: item.name,
+            mcqs: item.mcq_count,
+            notes: item.notes_count,
+            icon: item.icon
+        }));
+    } catch {
+        return getFallbackExamStats(category);
+    }
+};
+
+// 3. Helper for grouping materials by standard
+export const getMaterialsForStandard = async (std: string): Promise<SubjectSection[]> => {
     try {
         const { data, error } = await supabase
             .from('study_materials')
@@ -31,81 +89,59 @@ export const getMaterialsForStandard = async (std: string): Promise<SubjectSecti
             .eq('standard', std)
             .order('created_at', { ascending: false });
 
-        if (error) {
-            console.error('Error fetching materials:', error);
-            return getFallbackData(std); // Return fallback on error too
-        }
+        if (error || !data || data.length === 0) return [];
 
-        if (!data || data.length === 0) {
-            return getFallbackData(std);
-        }
-
-        // Group by subject
         const groupedMap = new Map<string, Material[]>();
-
         data.forEach((item: any) => {
-            if (!groupedMap.has(item.subject)) {
-                groupedMap.set(item.subject, []);
-            }
-            groupedMap.get(item.subject)!.push({
-                id: item.id,
-                title: item.title,
-                author: item.author,
-                type: item.type,
-                link: item.link,
-                created_at: item.created_at
-            });
+            if (!groupedMap.has(item.subject)) groupedMap.set(item.subject, []);
+            groupedMap.get(item.subject)!.push(item as Material);
         });
 
-        // Convert map to array
-        const results: SubjectSection[] = [];
-        groupedMap.forEach((materials, subject) => {
-            results.push({ subject, materials });
-        });
-
-        return results;
-
-    } catch (err) {
-        console.error('Unexpected error:', err);
-        return getFallbackData(std);
+        return Array.from(groupedMap.entries()).map(([subject, materials]) => ({ subject, materials }));
+    } catch {
+        return [];
     }
 };
 
-// Helper for demonstration data
-function getFallbackData(std: string): SubjectSection[] {
-    const data: Record<string, SubjectSection[]> = {
-        'std-10': [
-            {
-                subject: 'Tamil',
-                materials: [
-                    { id: 1, title: '10th Tamil Full Guide 2026', author: 'Victory', type: 'Guide', link: '#' },
-                    { id: 2, title: '10th Tamil Quarterly Exam 2025 QP', author: 'Padasalai', type: 'Exam Paper', link: '#' }
-                ]
-            },
-            {
-                subject: 'Maths',
-                materials: [
-                    { id: 3, title: '10th Maths PTA Model QP 1', author: 'PTA', type: 'Model Paper', link: '#' }
-                ]
-            }
-        ],
-        'std-11': [
-            {
-                subject: 'Physics',
-                materials: [
-                    { id: 4, title: '11th Physics Unit 1 Notes', author: 'KSR', type: 'Notes', link: '#' }
-                ]
-            }
-        ],
-        'std-12': [
-            {
-                subject: 'Maths',
-                materials: [
-                    { id: 5, title: '12th Maths Volume 1 Guide', author: 'Loyola', type: 'Full Guide', link: '#' }
-                ]
-            }
-        ]
-    };
+// --- Fallback & Utility Functions ---
 
-    return data[std] || [];
+function getBadgeColors(type: string) {
+    const colors: Record<string, { bg: string, text: string }> = {
+        'PDF': { bg: '#e0f2fe', text: '#0369a1' },
+        'MCQ': { bg: '#fef2f2', text: '#b91c1c' },
+        'Exam': { bg: '#f0fdf4', text: '#15803d' },
+        'Notes': { bg: '#f5f3ff', text: '#6d28d9' },
+    };
+    return colors[type] || { bg: '#f3f4f6', text: '#374151' };
+}
+
+function getFallbackUpdates(): UpdateItem[] {
+    return [
+        { title: '12th Physics Vol-1 Samacheer Book', type: 'PDF', date: 'Jan 12, 2026', tag: 'New', badgeColor: '#e0f2fe', textColor: '#0369a1' },
+        { title: 'TNPSC Group-4 General Tamil MCQ', type: 'MCQ', date: 'Jan 11, 2026', tag: 'Hot', badgeColor: '#fef2f2', textColor: '#b91c1c' },
+        { title: '10th Maths Model Question Paper', type: 'Exam', date: 'Jan 10, 2026', tag: 'Updates', badgeColor: '#f0fdf4', textColor: '#15803d' },
+        { title: 'SSLC Science Chapter 5 Notes', type: 'Notes', date: 'Jan 09, 2026', tag: 'PDF', badgeColor: '#f5f3ff', textColor: '#6d28d9' },
+    ];
+}
+
+function getFallbackExamStats(category: string): ExamStat[] {
+    if (category === 'TNPSC') {
+        return [
+            { name: 'TNPSC Group 1', mcqs: '2,500+', notes: '150+', icon: '🏛️' },
+            { name: 'TNPSC Group 2', mcqs: '3,200+', notes: '200+', icon: '🏛️' },
+            { name: 'TNPSC Group 4', mcqs: '5,000+', notes: '350+', icon: '🏛️' },
+            { name: 'VAO', mcqs: '1,800+', notes: '120+', icon: '🏘️' },
+        ];
+    }
+    if (category === 'TET') {
+        return [
+            { name: 'TET Paper 1', mcqs: '2,100+', notes: '180+', icon: '📝' },
+            { name: 'TET Paper 2', mcqs: '2,400+', notes: '190+', icon: '📖' },
+        ];
+    }
+    return [
+        { name: 'TRB Secondary Teacher', mcqs: '1,500+', notes: '100+', icon: '👨‍🏫' },
+        { name: 'TRB PG Assistant', mcqs: '2,000+', notes: '140+', icon: '👨‍🎓' },
+        { name: 'TRB BT Assistant', mcqs: '1,800+', notes: '120+', icon: '🧑‍🏫' },
+    ];
 }

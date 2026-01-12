@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import { getLatestUpdates, getExamStats } from '@/lib/study-materials';
 
 const streams = [
   { id: 'std-10', title: '10th Standard', icon: '📖', desc: 'Samacheer Kalvi Books & Notes' },
@@ -101,32 +102,15 @@ const subjects = [
   },
 ];
 
-const tnpscExams = [
-  { name: 'TNPSC Group 1', mcqs: '2,500+', notes: '150+', icon: '🏛️' },
-  { name: 'TNPSC Group 2', mcqs: '3,200+', notes: '200+', icon: '🏛️' },
-  { name: 'TNPSC Group 4', mcqs: '5,000+', notes: '350+', icon: '🏛️' },
-  { name: 'VAO', mcqs: '1,800+', notes: '120+', icon: '🏘️' },
-];
+export default async function Home() {
+  // --- FETCH DATA FROM SUPABASE (STEP 1) ---
+  const [latestUpdates, tnpscExams, tetExams, trbExams] = await Promise.all([
+    getLatestUpdates(),
+    getExamStats('TNPSC'),
+    getExamStats('TET'),
+    getExamStats('TRB')
+  ]);
 
-const tetExams = [
-  { name: 'TET Paper 1', mcqs: '2,100+', notes: '180+', icon: '📝' },
-  { name: 'TET Paper 2', mcqs: '2,400+', notes: '190+', icon: '📖' },
-];
-
-const trbExams = [
-  { name: 'TRB Secondary Teacher', mcqs: '1,500+', notes: '100+', icon: '👨‍🏫' },
-  { name: 'TRB PG Assistant', mcqs: '2,000+', notes: '140+', icon: '👨‍🎓' },
-  { name: 'TRB BT Assistant', mcqs: '1,800+', notes: '120+', icon: '🧑‍🏫' },
-];
-
-const latestUpdates = [
-  { title: '12th Physics Vol-1 Samacheer Book', type: 'PDF', date: 'Jan 12, 2026', tag: 'New', badgeColor: '#e0f2fe', textColor: '#0369a1' },
-  { title: 'TNPSC Group-4 General Tamil MCQ', type: 'MCQ', date: 'Jan 11, 2026', tag: 'Hot', badgeColor: '#fef2f2', textColor: '#b91c1c' },
-  { title: '10th Maths Model Question Paper', type: 'Exam', date: 'Jan 10, 2026', tag: 'Updates', badgeColor: '#f0fdf4', textColor: '#15803d' },
-  { title: 'SSLC Science Chapter 5 Notes', type: 'Notes', date: 'Jan 09, 2026', tag: 'PDF', badgeColor: '#f5f3ff', textColor: '#6d28d9' },
-];
-
-export default function Home() {
   return (
     <>
       {/* Hero Section */}
@@ -151,7 +135,6 @@ export default function Home() {
             </div>
             <div className={styles.heroRight}>
               <div className={styles.heroImageContainer}>
-                {/* Image moved to public folder in previous step */}
                 <img
                   src="/professor_hero.png"
                   alt="Professor teaching Tamil Nadu students in a library"
@@ -183,7 +166,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Subject Explorer Improvement */}
+      {/* Subject Explorer */}
       <section className={styles.subjectSection}>
         <div className="container">
           <h2 className={styles.sectionTitleLarge}>Explore by Subject</h2>
@@ -287,7 +270,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why TNPSCTRBR - Trusted Academy */}
+      {/* Why TNPSCTRBR */}
       <section className={styles.whySection}>
         <div className="container">
           <div className={styles.whyGrid}>
@@ -331,7 +314,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Latest Updates Improvement */}
+      {/* Latest Updates */}
       <section className={styles.updatesSection}>
         <div className="container">
           <h2 className={styles.sectionTitleLarge}>Latest Updates</h2>
