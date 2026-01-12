@@ -67,7 +67,7 @@ export default async function Home() {
               Previous Year Question Papers, and expert Career Guidance all in one place.
             </p>
             <div className={styles.heroActions}>
-              <Link href="/courses" className={styles.enrollBtn}>
+              <Link href="/std-12" className={styles.enrollBtn}>
                 Explore Materials 🖱️
               </Link>
             </div>
@@ -79,37 +79,6 @@ export default async function Home() {
               alt="Student"
               className={styles.heroImage}
             />
-          </div>
-
-          <div className={styles.heroFeatures}>
-            <div className={styles.featureItem}>
-              <span className={styles.featureIcon}>📺</span>
-              <div className={styles.featureText}>
-                <strong>Live Interactive Classes</strong>
-                <p>Engage with top subject experts</p>
-              </div>
-            </div>
-            <div className={styles.featureItem}>
-              <span className={styles.featureIcon}>📱</span>
-              <div className={styles.featureText}>
-                <strong>Mobile Learning App</strong>
-                <p>Study anytime on Android & iOS</p>
-              </div>
-            </div>
-            <div className={styles.featureItem}>
-              <span className={styles.featureIcon}>📝</span>
-              <div className={styles.featureText}>
-                <strong>Comprehensive Test Series</strong>
-                <p>Real-time exam practice units</p>
-              </div>
-            </div>
-            <div className={styles.featureItem}>
-              <span className={styles.featureIcon}>📄</span>
-              <div className={styles.featureText}>
-                <strong>High Quality PDF Notes</strong>
-                <p>Downloadable & printable resources</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
