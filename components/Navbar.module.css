@@ -1,14 +1,71 @@
-.navbar {
+.header {
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: var(--bg-header);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-color);
+}
+
+.topBar {
+    background: #3f187a;
+    color: white;
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+}
+
+.topBarContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.contactInfo {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.topActions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.socialIcons {
+    display: flex;
+    gap: 1rem;
+}
+
+.socialIcons a {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.socialIcons a:hover {
+    opacity: 1;
+}
+
+.plannerBtn {
+    background: #f43f5e;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.authBtn {
+    background: white;
+    color: #3f187a;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.navbar {
+    background: white;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
-    padding: 0.75rem 0;
-    transition: all 0.3s ease;
 }
 
 .navContainer {
@@ -22,16 +79,14 @@
 
 .logo {
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: 900;
     font-family: var(--font-heading);
-    background: var(--grad-primary);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #1e1b4b;
     letter-spacing: -0.05em;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+}
+
+.logo span {
+    color: #f43f5e;
 }
 
 .navLinks {
@@ -42,53 +97,64 @@
 
 .navLink {
     font-weight: 600;
-    color: var(--text-main);
+    color: #4b5563;
     font-family: var(--font-heading);
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: var(--radius-sm);
-    transition: background 0.2s ease, color 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
 }
 
 .navLink:hover {
-    color: var(--primary);
-    background: rgba(79, 70, 229, 0.05);
+    color: #3f187a;
+}
+
+.navExtra {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.cartIcon {
+    position: relative;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.cartBadge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #1e1b4b;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    border-radius: 50%;
+    font-weight: 700;
 }
 
 .mobileMenuBtn {
-    display: none;
-    background: var(--bg-page);
-    border: 1px solid var(--border-color);
+    background: #f3f4f6;
+    border: none;
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
     font-size: 1.25rem;
     cursor: pointer;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.mobileMenuBtn:hover {
-    background: var(--border-color);
+    color: #1e1b4b;
+    display: none;
 }
 
 @media (max-width: 1024px) {
-    .navLinks {
-        gap: 0.8rem;
-    }
-}
-
-@media (max-width: 768px) {
     .navLinks {
         display: none;
     }
 
     .mobileMenuBtn {
         display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .topBar {
+        display: none;
     }
 }

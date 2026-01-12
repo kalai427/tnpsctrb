@@ -56,12 +56,61 @@ export default async function Home() {
   return (
     <>
       <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>Your Success Starts Here</h1>
-        <p className={styles.heroSubtitle}>
-          The No.1 Educational Portal for Tamil Nadu Students. Study Materials, Question Papers, and Career Guidance.
-        </p>
-        <div className={styles.searchBar}>
-          <input type="text" placeholder="Search for '12th Maths Question Paper'..." className={styles.searchInput} />
+        <div className={styles.heroContainer}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>ADMISSION OPEN FOR 2026</div>
+            <h1 className={styles.heroTitle}>
+              Your Success Starts <span className={styles.highlight}>Here</span>
+            </h1>
+            <p className={styles.heroSubtitle}>
+              The No.1 Educational Portal for Tamil Nadu Students. Providing top-tier Study Materials,
+              Previous Year Question Papers, and expert Career Guidance.
+            </p>
+            <div className={styles.heroActions}>
+              <Link href="/courses" className={styles.enrollBtn}>
+                Enroll Now 🖱️
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.heroImageContainer}>
+            <img
+              src="/student_with_books.png"
+              alt="Student"
+              className={styles.heroImage}
+            />
+          </div>
+
+          <div className={styles.heroFeatures}>
+            <div className={styles.featureItem}>
+              <span className={styles.featureIcon}>📺</span>
+              <div className={styles.featureText}>
+                <strong>Live Interactive Classes</strong>
+                <p>Learn from top educators</p>
+              </div>
+            </div>
+            <div className={styles.featureItem}>
+              <span className={styles.featureIcon}>📱</span>
+              <div className={styles.featureText}>
+                <strong>Mobile App Support</strong>
+                <p>Study on the go (Android & iOS)</p>
+              </div>
+            </div>
+            <div className={styles.featureItem}>
+              <span className={styles.featureIcon}>📝</span>
+              <div className={styles.featureText}>
+                <strong>Mock Exams & Tests</strong>
+                <p>Full-length practice papers</p>
+              </div>
+            </div>
+            <div className={styles.featureItem}>
+              <span className={styles.featureIcon}>📄</span>
+              <div className={styles.featureText}>
+                <strong>PDF Study Materials</strong>
+                <p>High quality notes & supplements</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
