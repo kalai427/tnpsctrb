@@ -92,7 +92,7 @@ export default async function Home() {
               <ul className={styles.linkList}>
                 {links.map((link) => (
                   <li key={link.id}>
-                    <a href={link.url}>{link.title}</a>
+                    <Link href={link.url || '#'}>{link.title}</Link>
                   </li>
                 ))}
                 {links.length === 0 && (
