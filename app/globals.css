@@ -9,6 +9,18 @@
   --warning: #f59e0b;
   --danger: #ef4444;
 
+  /* Standard Colors */
+  --std-10: #2563eb;
+  /* Blue */
+  --std-11: #10b981;
+  /* Green */
+  --std-12: #f59e0b;
+  /* Orange */
+  --std-tnpsc: #ef4444;
+  /* Red */
+  --std-neet: #8b5cf6;
+  /* Purple */
+
   /* Gradients */
   --grad-primary: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%, #3b82f6 100%);
   --grad-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
@@ -204,4 +216,50 @@ ul {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-family: var(--font-heading);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: var(--font-heading);
+}
+
+.chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.chip.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
