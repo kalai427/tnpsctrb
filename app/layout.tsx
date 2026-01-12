@@ -15,8 +15,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "TNPSCTRB",
-  description: "Study materials, Question Papers, and Key Answers for 10th, 11th, 12th Std.",
+  title: "TNPSCTRB - Tamil Nadu Education Portal",
+  description: "Everything Tamil Nadu Students Need to Succeed. Access Textbooks, Notes, MCQs, and Exam Updates for 10th, 11th, 12th, TNPSC & TET.",
 };
 
 export default function RootLayout({
