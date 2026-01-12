@@ -58,7 +58,6 @@ export default async function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>ADMISSION OPEN FOR 2026</div>
             <h1 className={styles.heroTitle}>
               Master Your Exams, <span className={styles.highlight}>Secure Your Future.</span>
             </h1>
@@ -66,11 +65,6 @@ export default async function Home() {
               The No.1 Educational Portal for Tamil Nadu Students. Access premium Study Materials,
               Previous Year Question Papers, and expert Career Guidance all in one place.
             </p>
-            <div className={styles.heroActions}>
-              <Link href="/std-12" className={styles.enrollBtn}>
-                Explore Materials 🖱️
-              </Link>
-            </div>
           </div>
 
           <div className={styles.heroImageContainer}>
