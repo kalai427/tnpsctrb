@@ -92,15 +92,21 @@ export default async function Home() {
               <ul className={styles.linkList}>
                 {links.map((link) => (
                   <li key={link.id}>
-                    <Link href={link.url || '#'}>{link.title}</Link>
+                    <a
+                      href={link.url || '#'}
+                      target={link.url?.startsWith('http') ? '_blank' : '_self'}
+                      rel="noopener noreferrer"
+                    >
+                      {link.title}
+                    </a>
                   </li>
                 ))}
                 {links.length === 0 && (
                   <>
-                    <li><Link href="#">10th/11th/12th Text Books</Link></li>
-                    <li><Link href="#">Public Exam Time Table</Link></li>
-                    <li><Link href="#">Lesson Plan 2026</Link></li>
-                    <li><Link href="#">PTA Model Question Papers</Link></li>
+                    <li><a href="/textbooks">10th/11th/12th Text Books</a></li>
+                    <li><a href="/timetable">Public Exam Time Table</a></li>
+                    <li><a href="/lesson-plan">Lesson Plan 2026</a></li>
+                    <li><a href="/model-papers">PTA Model Question Papers</a></li>
                   </>
                 )}
               </ul>
